@@ -76,7 +76,7 @@ def extract_faces(img):
 def identify_face(facearray):
     """Identify a face using the trained model."""
     try:
-        model = joblib.load("static/models/face_recognition_model.pkl")
+        model = joblib.load("models/face_recognition_model.pkl")
         return model.predict(facearray)
     except Exception as e:
         logging.error(f"Error identifying face: {e}")
@@ -113,10 +113,10 @@ def train_model():
             "matthews_cc": matthews_corrcoef(y_test, y_pred),
         }
 
-        with open("static/models/metrics.pkl", "wb") as f:
+        with open("models/metrics.pkl", "wb") as f:
             joblib.dump(metrics, f)
 
-        joblib.dump(knn, "static/models/face_recognition_model.pkl")
+        joblib.dump(knn, "models/face_recognition_model.pkl")
     except Exception as e:
         logging.error(f"Error training model: {e}")
 
@@ -224,7 +224,7 @@ def start():
     """Start the face recognition process."""
     names, rolls, arrivees, departs, l = extract_attendance()
 
-    if "face_recognition_model.pkl" not in os.listdir("static/models/"):
+    if "face_recognition_model.pkl" not in os.listdir("models/"):
         return render_template(
             "home.html",
             names=names,
@@ -282,8 +282,8 @@ def start():
 def metrics():
     """Render the metrics page with model performance metrics."""
     try:
-        if os.path.exists("static/models/metrics.pkl"):
-            with open("static/models/metrics.pkl", "rb") as f:
+        if os.path.exists("models/metrics.pkl"):
+            with open("models/metrics.pkl", "rb") as f:
                 metrics = joblib.load(f)
                 metrics = {k: round(v, 2) if isinstance(v, (int, float)) else v
                          for k, v in metrics.items()}
