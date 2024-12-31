@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
-nimgs = 10
+nimgs = 50
 
 datetoday = date.today().strftime("%d_%m_%y")
 datetoday2 = date.today().strftime("%d-%B-%Y")

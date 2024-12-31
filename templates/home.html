@@ -1,212 +1,347 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-
-<style type='text/css'>
+  <style type="text/css">
     * {
-        padding: 0;
-        margin: 0;
-        font-family: 'jetBrains Mono', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 0;
+      margin: 0;
+      font-family: "jetBrains Mono", Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
-        background-image: url('https://img.pogo.org/image/content/2018/facial-recognition-gif-v5-o_1150.gif?auto=compress%2Cformat&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=800&q=80&ratio=1.5&w=1200&s=4e2f6eeb1cc9940aa21f63bb62f2d161');
-        background-size: cover;
-        margin-top: 40px;
-        padding: 0;
-        margin: 0;
+      background-image: url("https://img.pogo.org/image/content/2018/facial-recognition-gif-v5-o_1150.gif?auto=compress%2Cformat&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=800&q=80&ratio=1.5&w=1200&s=4e2f6eeb1cc9940aa21f63bb62f2d161");
+      background-size: cover;
+      margin-top: 40px;
+      padding: 0;
+      margin: 0;
     }
 
     .navbar {
-        background-color: rgba(34, 193, 195, 0.9) !important;
+      background-color: rgba(34, 193, 195, 0.9) !important;
     }
 
     .navbar-brand,
     .nav-link {
-        color: rgba(0, 0, 0, 0.9) !important;
+      color: rgba(0, 0, 0, 0.9) !important;
     }
 
     .navbar-brand:hover,
     .nav-link:hover {
-        color: rgba(34, 193, 195, 0.9) !important;
+      color: rgba(34, 193, 195, 0.9) !important;
     }
 
     .container {
-        margin-top: 20px;
+      margin-top: 20px;
     }
 
-
     table {
-        border-radius: 20px;
-        border-collapse: collapse;
-        width: 86%;
-        margin: auto;
+      border-radius: 20px;
+      border-collapse: collapse;
+      width: 86%;
+      margin: auto;
     }
 
     td,
     th {
-        padding: 10px;
+      padding: 10px;
     }
 
     tr:nth-child(even) {
-        background-color: #f0f0f0;
+      background-color: #f0f0f0;
     }
 
     tr:nth-child(odd) {
-        background-color: #e0e0e0;
+      background-color: #e0e0e0;
     }
 
     @media (max-width: 768px) {
-        h1 {
-            font-size: 20px;
-        }
+      h1 {
+        font-size: 20px;
+      }
 
-        .btn,
-        .btn-primary {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 16px;
-            margin-top: 20px;
-            margin-bottom: 20px;
+      .btn,
+      .btn-primary {
+        width: 100%;
+        padding: 15px 20px;
+        font-size: 16px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
 
-        }
+      table {
+        width: 100%;
+      }
 
-        table {
-            width: 100%;
-        }
+      td,
+      th {
+        padding: 8px;
+        font-size: 14px;
+      }
 
-        td,
-        th {
-            padding: 8px;
-            font-size: 14px;
-        }
+      input[type="text"],
+      input[type="number"] {
+        width: 90%;
+        height: 40px;
+        font-size: 18px;
+      }
 
-        input[type="text"],
-        input[type="number"] {
-            width: 90%;
-            height: 40px;
-            font-size: 18px;
-        }
-
-        .col {
-            padding: 5px;
-            margin: 5px;
-        }
+      .col {
+        padding: 5px;
+        margin: 5px;
+      }
     }
-</style>
+  </style>
 
-<head>
+  <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link rel="icon" href="{{ url_for('static', filename='images/app_logo.png') }}">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='images/app_logo.png') }}"
+    />
 
     <title>Système de Présence Basé sur la Reconnaissance Faciale</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">SDPE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/metrics">Metrics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/export/csv">Exporter en CSV</a>
-                    </li>
-                </ul>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">SDPE</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/metrics">Metrics</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/export/csv">Exporter en CSV</a>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
-    <div class='mt-3 text-center' style=" background-color: rgba(34, 193, 195, 0.9);">
-        <img src="{{ url_for('static', filename='images/aikini_logo.jpg') }}" alt="Logo"
-            style="padding-top: 10px; border-radius: 5px; vertical-align: middle; width: 120px; height: auto;">
-        <h1 style="color: white; padding: 10px; font-size: 44px; margin-top: 10px;">Système de
-            Détection de la Présence
-            des Employés (SDPE)</h1>
+    <div
+      class="mt-3 text-center"
+      style="background-color: rgba(34, 193, 195, 0.9)"
+    >
+      <img
+        src="{{ url_for('static', filename='images/aikini_logo.jpg') }}"
+        alt="Logo"
+        style="
+          padding-top: 10px;
+          border-radius: 5px;
+          vertical-align: middle;
+          width: 120px;
+          height: auto;
+        "
+      />
+      <h1
+        style="color: white; padding: 10px; font-size: 44px; margin-top: 10px"
+      >
+        Système de Détection de la Présence des Employés (SDPE)
+      </h1>
     </div>
 
     {% if mess %}
-    <p class="text-center" style="color: red; font-size: 20px;">{{ mess }}</p>
+    <p class="text-center" style="color: red; font-size: 20px">{{ mess }}</p>
     {% endif %}
 
-    <div class="row text-center" style="padding: 20px; margin: 20px;">
+    <div class="row text-center" style="padding: 20px; margin: 20px">
+      <div
+        class="col"
+        style="
+          border-radius: 20px;
+          padding: 0px;
+          background-color: rgba(0, 0, 0, 0.8);
+          margin: 0px 10px 10px 10px;
+          min-height: 400px;
+        "
+      >
+        <h2
+          style="
+            border-radius: 20px 20px 0px 0px;
+            background-color: rgb(34, 193, 195);
+            color: white;
+            padding: 10px;
+          "
+        >
+          Présence d'Aujourd'hui<i class="material-icons">assignment</i>
+        </h2>
+        <a style="text-decoration: none; max-width: 100%" href="/start">
+          <button
+            style="
+              font-size: 24px;
+              font-weight: bold;
+              border-radius: 10px;
+              width: 100%;
+              padding: 10px;
+              margin-top: 30px;
+              margin-bottom: 30px;
+            "
+            type="submit"
+            class="btn btn-primary"
+          >
+            Prendre la Présence <i class="material-icons">beenhere</i>
+          </button>
+        </a>
+        <table style="background-color: white">
+          <tr>
+            <td><b>ID</b></td>
+            <td><b>Prènom</b></td>
+            <td><b>N° Emp</b></td>
+            <td><b>Temps d'arrivée</b></td>
+            <td><b>Temps de Départ</b></td>
+          </tr>
+          {% if l %} {% for i in range(l) %}
+          <tr>
+            <td>{{ i+1 }}</td>
+            <td>{{ names[i] }}</td>
+            <td>{{ rolls[i] }}</td>
+            <td>{{ arrivees[i] }}</td>
+            <td>{{ departs[i] }}</td>
+          </tr>
+          {% endfor %} {% endif %}
+        </table>
+      </div>
 
-        <div class="col"
-            style="border-radius: 20px; padding: 0px; background-color:rgba(0, 0, 0, 0.8); margin:0px 10px 10px 10px; min-height: 400px;">
-            <h2
-                style="border-radius: 20px 20px 0px 0px; background-color: rgb(34, 193, 195); color: white; padding: 10px;">
-                Présence d'Aujourd'hui<i class="material-icons">assignment</i></h2>
-            <a style="text-decoration: none; max-width: 100%;" href="/start">
-                <button
-                    style="font-size: 24px; font-weight: bold; border-radius: 10px; width: 100%; padding: 10px; margin-top: 30px; margin-bottom: 30px;"
-                    type='submit' class='btn btn-primary'>Prendre la Présence <i
-                        class="material-icons">beenhere</i></button>
-            </a>
-            <table style="background-color: white;">
-                <tr>
-                    <td><b>ID</b></td>
-                    <td><b>Prènom</b></td>
-                    <td><b>N° Emp</b></td>
-                    <td><b>Temps d'arrivée</b></td>
-                    <td><b>Temps de Départ</b></td>
-                </tr>
-                {% if l %}
-
-                {% for i in range(l) %}
-                <tr>
-                    <td>{{ i+1 }}</td>
-                    <td>{{ names[i] }}</td>
-                    <td>{{ rolls[i] }}</td>
-                    <td>{{ arrivees[i] }}</td>
-                    <td>{{ departs[i] }}</td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </table>
-
-        </div>
-
-        <div class="col"
-            style="border-radius: 20px; padding: 0px; background-color:rgba(0, 0, 0, 0.8); margin:0px 10px 10px 10px; height: 400px;">
-            <form action='/add' method="POST" enctype="multipart/form-data">
-                <h2
-                    style="border-radius: 20px 20px 0px 0px; background-color: rgb(34, 193, 195); color: white; padding: 10px;">
-                    Ajouter un Nouvel Utilisateur <i class="material-icons">control_point_duplicate</i></h2>
-                <label style="font-size: 20px; color: white"><b>Entrez le Nom du Nouvel Utilisateur*</b></label>
-                <br>
-                <input type="text" id="newusername" name='newusername'
-                    style="font-size: 20px; margin-top:10px; margin-bottom:10px; border-radius: 10px; width: 300px; height: 50px;"
-                    required>
-                <br>
-                <label style="font-size: 20px; color: white"><b>Entrez le N° Emp du Nouvel Utilisateur*</b></label>
-                <br>
-                <input type="number" id="newusereid" name='newuserid'
-                    style="font-size: 20px; margin-top:10px; margin-bottom:10px; border-radius: 10px; width: 300px; height: 50px;"
-                    required>
-                <br>
-                <button
-                    style="width: 232px; margin-top: 10px; font-size: 20px; border-radius: 10px; width: 300px; height: 80px;"
-                    type='submit' class='btn btn-dark'>Ajouter ce Nouvel Utilisateur
-                </button>
-                <br>
-                <h5 style="padding: 25px; color: white;"><i>Utilisateurs Totals dans la Base de Données:
-                        {{totalreg}}</i></h5>
-            </form>
-        </div>
+      <div
+        class="col"
+        style="
+          border-radius: 20px;
+          padding: 0px;
+          background-color: rgba(0, 0, 0, 0.8);
+          margin: 0px 10px 10px 10px;
+          height: 400px;
+        "
+      >
+        <form action="/add" method="POST" enctype="multipart/form-data">
+          <h2
+            style="
+              border-radius: 20px 20px 0px 0px;
+              background-color: rgb(34, 193, 195);
+              color: white;
+              padding: 10px;
+            "
+          >
+            Ajouter un Nouvel Utilisateur
+            <i class="material-icons">control_point_duplicate</i>
+          </h2>
+          <label style="font-size: 20px; color: white"
+            ><b>Entrez le Nom du Nouvel Utilisateur*</b></label
+          >
+          <br />
+          <input
+            type="text"
+            id="newusername"
+            name="newusername"
+            style="
+              font-size: 20px;
+              margin-top: 10px;
+              margin-bottom: 10px;
+              border-radius: 10px;
+              width: 300px;
+              height: 50px;
+            "
+            required
+          />
+          <br />
+          <label style="font-size: 20px; color: white"
+            ><b>Entrez le N° Emp du Nouvel Utilisateur*</b></label
+          >
+          <br />
+          <input
+            type="number"
+            id="newusereid"
+            name="newuserid"
+            style="
+              font-size: 20px;
+              margin-top: 10px;
+              margin-bottom: 10px;
+              border-radius: 10px;
+              width: 300px;
+              height: 50px;
+            "
+            required
+          />
+          <br />
+          <button
+            style="
+              width: 232px;
+              margin-top: 10px;
+              font-size: 20px;
+              border-radius: 10px;
+              width: 300px;
+              height: 80px;
+            "
+            type="submit"
+            class="btn btn-dark"
+          >
+            Ajouter ce Nouvel Utilisateur
+          </button>
+          <br />
+          <h5 style="padding: 25px; color: white">
+            <i>Utilisateurs Totals dans la Base de Données: {{totalreg}}</i>
+          </h5>
+        </form>
+      </div>
     </div>
+
+    <!-- JavaScript for progress bar and messages -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const progressBar = document.createElement("div");
+        progressBar.style.width = "100%";
+        progressBar.style.backgroundColor = "#007bff";
+        progressBar.style.height = "20px";
+        progressBar.style.position = "fixed";
+        progressBar.style.top = "0";
+        progressBar.style.left = "0";
+        progressBar.style.zIndex = "1000";
+        progressBar.style.display = "none";
+        document.body.appendChild(progressBar);
+
+        document.querySelectorAll("form").forEach((form) => {
+          form.addEventListener("submit", function () {
+            progressBar.style.display = "block";
+          });
+        });
+
+        document.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", function () {
+            progressBar.style.display = "block";
+          });
+        });
+
+        window.addEventListener("load", function () {
+          progressBar.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

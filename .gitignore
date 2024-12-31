@@ -2,3 +2,5 @@
 .gitignore
 Attendance/*.db
 static/faces/*
+app_copy.py
+/static/*
