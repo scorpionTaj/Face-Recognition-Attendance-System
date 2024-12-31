@@ -76,10 +76,10 @@ Main Project Folder
 │   └── metrics.html                         # Metrics page HTML template
 │
 |
-├── .gitignore                   # Git ignore file to specify which files and directories to ignore
-├── app.py                       # Main application file
-├── LICENSE                      # License file for the project
-├── README.md                    # Readme file for the project overview and instructions
+├── .gitignore                               # Git ignore file to specify which files and directories to ignore
+├── app.py                                   # Main application file
+├── LICENSE                                  # License file for the project
+├── README.md                                # Readme file for the project overview and instructions
 ```
 
 ## Contributing
