@@ -191,20 +191,20 @@ def generate_pdf():
         pdf_canvas.setTitle("Attendance Report")
 
         pdf_canvas.drawString(220, 750, "Attendance Report")
-        pdf_canvas.drawString(220, 730, f"Date: {DATETODAY2}")  # noqa: E501
+        pdf_canvas.drawString(220, 730, f"Date: {DATETODAY2}")
 
         pdf_canvas.drawString(50, 700, "ID")
-        pdf_canvas.drawString(150, 700, "Prénom")  # noqa: E501
+        pdf_canvas.drawString(150, 700, "Prénom")
         pdf_canvas.drawString(250, 700, "N° Emp")
-        pdf_canvas.drawString(350, 700, "Temps d'arrivée")  # noqa: E501
-        pdf_canvas.drawString(500, 700, "Temps de Départ")  # noqa: E501
+        pdf_canvas.drawString(350, 700, "Temps d'arrivée")
+        pdf_canvas.drawString(500, 700, "Temps de Départ")
 
         y = 680
         for i in range(l):
             pdf_canvas.drawString(50, y, str(i + 1))
             pdf_canvas.drawString(150, y, names[i])
             pdf_canvas.drawString(250, y, str(rolls[i]))
-            pdf_canvas.drawString(350, y, arrivees[i])  # noqa: E501
+            pdf_canvas.drawString(350, y, arrivees[i])
             pdf_canvas.drawString(500, y, departs[i])
             y -= 20
 
