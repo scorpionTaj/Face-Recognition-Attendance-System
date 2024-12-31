@@ -44,10 +44,43 @@ The system captures real-time video feed from the webcam, detects faces using Ha
 
 ## Directory Structure
 
-- `app.py`: Main Flask application file.
-- `templates/`: HTML templates for the web interface.
-- `static/`: Static files including user images and Trained Model.
-- `haarcascade_frontalface_default.xml`: Pre-trained Haar cascade classifier for face detection.
+Main Project Folder
+
+├── attendance/                               # Directory for attendance-related functionality
+│   └── attendance_{datetoday}.db             # Attendance-related files (SQLite Database)
+│
+├── classifiers/                             # Directory for Haar Cascade classifier files
+│   └── haarcascade_frontalface_default.xml  # Haar Cascade file for face detection
+│
+├── config/                                  # Directory for configuration files
+│   └── requirements.txt                     # File listing the project's dependencies
+│
+├── docker/                                  # Directory for Docker-related files
+│   ├── dockerfile                           # Dockerfile for containerizing the application
+│   └── dockerfile.txt                       # Additional Docker-related file (if any)
+|
+├── docs/                                    # Directory for documentation files
+│   └── Details.md                           # Additional documentation file
+│
+├── logs/                                    # Directory for log files
+│   └── app.log                              # Application log file
+│
+├── models/                                  # Directory for serialized model files
+│   └── your_model.pkl                       # Serialized Python object file (e.g., machine learning model)
+│
+├── static/                                  # Directory for static assets
+│   └── ...                                  # CSS, JavaScript, images, and other static files
+│
+├── templates/                               # Directory for HTML templates
+│   ├── home.html                            # Home page HTML template
+│   └── metrics.html                         # Metrics page HTML template
+│
+|
+├── .gitignore                   # Git ignore file to specify which files and directories to ignore
+├── app.py                       # Main application file
+├── LICENSE                      # License file for the project
+├── README.md                    # Readme file for the project overview and instructions
+
 
 ## Contributing
 
