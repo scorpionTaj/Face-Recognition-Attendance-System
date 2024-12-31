@@ -21,27 +21,36 @@ import base64
 import matplotlib
 import logging
 
+# Use Agg backend for Matplotlib to avoid GUI-related issues
 matplotlib.use("agg")
 import matplotlib.pyplot as plt
 
+# Initialize Flask app
 app = Flask(__name__)
 
-nimgs = 50
+# Configuration parameters
+NIMGS = 50
+DATETODAY = date.today().strftime("%d_%m_%y")
+DATETODAY2 = date.today().strftime("%d-%B-%Y")
+FACE_DETECTOR_PATH = "classifiers/haarcascade_frontalface_default.xml"
+MODEL_PATH = "models/face_recognition_model.pkl"
+METRICS_PATH = "models/metrics.pkl"
+DB_PATH = f"Attendance/attendance_{DATETODAY}.db"
+LOG_PATH = "logs/app.log"
 
-datetoday = date.today().strftime("%d_%m_%y")
-datetoday2 = date.today().strftime("%d-%B-%Y")
+# Initialize face detector
+face_detector = cv2.CascadeClassifier(FACE_DETECTOR_PATH)
 
-face_detector = cv2.CascadeClassifier("classifiers/haarcascade_frontalface_default.xml")
-
-# Ensure directories exist
-for dir_path in ["Attendance", "static", "static/faces"]:
+# Ensure necessary directories exist
+for dir_path in ["Attendance", "static", "static/faces", "logs", "models"]:
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
 
-db_path = f"Attendance/attendance_{datetoday}.db"
-conn = sqlite3.connect(db_path, check_same_thread=False)
+# Initialize database connection
+conn = sqlite3.connect(DB_PATH, check_same_thread=False)
 c = conn.cursor()
 
+# Create attendance table if it doesn't exist
 c.execute(
     """
     CREATE TABLE IF NOT EXISTS attendance (
@@ -56,19 +65,21 @@ c.execute(
 )
 conn.commit()
 
-if not os.path.isdir("logs"):
-    os.makedirs("logs")
-
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    filename='logs/app.log',
-    format='%(asctime)s - %(message)s',
+    filename=LOG_PATH,
+    format='%(asctime)s - %(levelname)s - %(message)s',
     datefmt='%d-%b-%y %H:%M:%S'
 )
 
 def totalreg():
     """Return the total number of registered users."""
-    return len(os.listdir("static/faces"))
+    try:
+        return len(os.listdir("static/faces"))
+    except Exception as e:
+        logging.error(f"Error counting registered users: {e}")
+        return 0
 
 def extract_faces(img):
     """Extract faces from an image."""
@@ -83,7 +94,7 @@ def extract_faces(img):
 def identify_face(facearray):
     """Identify a face using the trained model."""
     try:
-        model = joblib.load("models/face_recognition_model.pkl")
+        model = joblib.load(MODEL_PATH)
         return model.predict(facearray)
     except Exception as e:
         logging.error(f"Error identifying face: {e}")
@@ -120,10 +131,10 @@ def train_model():
             "matthews_cc": matthews_corrcoef(y_test, y_pred),
         }
 
-        with open("models/metrics.pkl", "wb") as f:
+        with open(METRICS_PATH, "wb") as f:
             joblib.dump(metrics, f)
 
-        joblib.dump(knn, "models/face_recognition_model.pkl")
+        joblib.dump(knn, MODEL_PATH)
     except Exception as e:
         logging.error(f"Error training model: {e}")
 
@@ -132,7 +143,7 @@ def extract_attendance():
     try:
         c.execute(
             "SELECT prenom, emp_id, arrivee, depart FROM attendance WHERE date=?",
-            (datetoday,),
+            (DATETODAY,),
         )
         rows = c.fetchall()
         names = [row[0] for row in rows]
@@ -152,7 +163,7 @@ def export_to_csv():
 
         csv_output = StringIO()
         csv_writer = csv.writer(csv_output)
-        csv_writer.writerow(["Prènom", "N° Emp", "Temps d'arrivée", "Temps de Départ"])
+        csv_writer.writerow(["Prénom", "N° Emp", "Temps d'arrivée", "Temps de Départ"])
         for name, roll, arrive, depart in zip(names, rolls, arrivees, departs):
             csv_writer.writerow([name, roll, arrive, depart])
 
@@ -160,7 +171,7 @@ def export_to_csv():
             csv_output.getvalue(),
             mimetype="text/csv",
             headers={
-                "Content-Disposition": f"attachment;filename=attendance_{datetoday}.csv"
+                "Content-Disposition": f"attachment;filename=attendance_{DATETODAY}.csv"
             },
         )
     except Exception as e:
@@ -176,18 +187,18 @@ def add_attendance(name):
 
         c.execute(
             "SELECT arrivee, depart FROM attendance WHERE date=? AND emp_id=?",
-            (datetoday, userid),
+            (DATETODAY, userid),
         )
         row = c.fetchone()
         if row is None:
             c.execute(
                 "INSERT INTO attendance (prenom, emp_id, arrivee, date) VALUES (?, ?, ?, ?)",
-                (username, userid, current_time, datetoday),
+                (username, userid, current_time, DATETODAY),
             )
         else:
             c.execute(
                 "UPDATE attendance SET depart=? WHERE date=? AND emp_id=?",
-                (current_time, datetoday, userid),
+                (current_time, DATETODAY, userid),
             )
         conn.commit()
     except Exception as e:
@@ -223,7 +234,7 @@ def home():
         departs=departs,
         l=l,
         totalreg=totalreg(),
-        datetoday2=datetoday2,
+        datetoday2=DATETODAY2,
     )
 
 @app.route("/start", methods=["GET"])
@@ -240,7 +251,7 @@ def start():
             departs=departs,
             l=l,
             totalreg=totalreg(),
-            datetoday2=datetoday2,
+            datetoday2=DATETODAY2,
             mess="Il n'y a pas de modèle entraîné dans le dossier statique. Veuillez ajouter un nouveau visage pour continuer.",
         )
 
@@ -282,15 +293,15 @@ def start():
         departs=departs,
         l=l,
         totalreg=totalreg(),
-        datetoday2=datetoday2,
+        datetoday2=DATETODAY2,
     )
 
 @app.route("/metrics")
 def metrics():
     """Render the metrics page with model performance metrics."""
     try:
-        if os.path.exists("models/metrics.pkl"):
-            with open("models/metrics.pkl", "rb") as f:
+        if os.path.exists(METRICS_PATH):
+            with open(METRICS_PATH, "rb") as f:
                 metrics = joblib.load(f)
                 metrics = {k: round(v, 2) if isinstance(v, (int, float)) else v
                          for k, v in metrics.items()}
@@ -337,7 +348,7 @@ def add():
         cap = cv2.VideoCapture(0)
         captured_images = 0
 
-        while captured_images < nimgs:
+        while captured_images < NIMGS:
             ret, frame = cap.read()
             if not ret:
                 logging.error("Failed to capture image from the camera.")
@@ -348,7 +359,7 @@ def add():
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 20), 2)
                 cv2.putText(
                     frame,
-                    f"Images Captured: {captured_images}/{nimgs}",
+                    f"Images Captured: {captured_images}/{NIMGS}",
                     (30, 30),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
@@ -356,7 +367,7 @@ def add():
                     2,
                     cv2.LINE_AA,
                 )
-                if captured_images < nimgs:
+                if captured_images < NIMGS:
                     name = newusername + "_" + str(captured_images) + ".jpg"
                     cv2.imwrite(os.path.join(userimagefolder, name), frame[y : y + h, x : x + w])
                     captured_images += 1
@@ -368,10 +379,10 @@ def add():
         cap.release()
         cv2.destroyAllWindows()
 
-        if captured_images == nimgs:
+        if captured_images == NIMGS:
             train_model()
         else:
-            logging.warning(f"Captured {captured_images} images, expected {nimgs}.")
+            logging.warning(f"Captured {captured_images} images, expected {NIMGS}.")
 
         names, rolls, arrivees, departs, l = extract_attendance()
         return render_template(
@@ -382,11 +393,12 @@ def add():
             departs=departs,
             l=l,
             totalreg=totalreg(),
-            datetoday2=datetoday2,
+            datetoday2=DATETODAY2,
         )
     except Exception as e:
         logging.error(f"Error adding new user: {e}")
         return "Error adding new user", 500
+
 @app.route("/export/csv")
 def export_csv():
     """Export attendance data to a CSV file."""
