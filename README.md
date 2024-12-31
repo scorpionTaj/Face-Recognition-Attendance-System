@@ -13,6 +13,7 @@ The system captures real-time video feed from the webcam, detects faces using Ha
 - Flask
 - NumPy
 - scikit-learn
+- reportlab
 
 ## Installation
 
@@ -25,7 +26,7 @@ The system captures real-time video feed from the webcam, detects faces using Ha
 2. Install dependencies:
 
     ```bash
-    pip install -r requirements.txt
+    pip install -r config/requirements.txt
     ```
 
 ## Usage
