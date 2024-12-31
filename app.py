@@ -32,7 +32,7 @@ nimgs = 50
 datetoday = date.today().strftime("%d_%m_%y")
 datetoday2 = date.today().strftime("%d-%B-%Y")
 
-face_detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+face_detector = cv2.CascadeClassifier("classifiers/haarcascade_frontalface_default.xml")
 
 # Ensure directories exist
 for dir_path in ["Attendance", "static", "static/faces"]:
@@ -57,7 +57,7 @@ c.execute(
 )
 conn.commit()
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO,filename='/logs/app.log',format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 def totalreg():
     """Return the total number of registered users."""
@@ -76,7 +76,7 @@ def extract_faces(img):
 def identify_face(facearray):
     """Identify a face using the trained model."""
     try:
-        model = joblib.load("static/face_recognition_model.pkl")
+        model = joblib.load("static/models/face_recognition_model.pkl")
         return model.predict(facearray)
     except Exception as e:
         logging.error(f"Error identifying face: {e}")
@@ -113,10 +113,10 @@ def train_model():
             "matthews_cc": matthews_corrcoef(y_test, y_pred),
         }
 
-        with open("static/metrics.pkl", "wb") as f:
+        with open("static/models/metrics.pkl", "wb") as f:
             joblib.dump(metrics, f)
 
-        joblib.dump(knn, "static/face_recognition_model.pkl")
+        joblib.dump(knn, "static/models/face_recognition_model.pkl")
     except Exception as e:
         logging.error(f"Error training model: {e}")
 
@@ -224,7 +224,7 @@ def start():
     """Start the face recognition process."""
     names, rolls, arrivees, departs, l = extract_attendance()
 
-    if "face_recognition_model.pkl" not in os.listdir("static"):
+    if "face_recognition_model.pkl" not in os.listdir("static/models/"):
         return render_template(
             "home.html",
             names=names,
@@ -282,8 +282,8 @@ def start():
 def metrics():
     """Render the metrics page with model performance metrics."""
     try:
-        if os.path.exists("static/metrics.pkl"):
-            with open("static/metrics.pkl", "rb") as f:
+        if os.path.exists("static/models/metrics.pkl"):
+            with open("static/models/metrics.pkl", "rb") as f:
                 metrics = joblib.load(f)
                 metrics = {k: round(v, 2) if isinstance(v, (int, float)) else v
                          for k, v in metrics.items()}
