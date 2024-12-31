@@ -19,23 +19,23 @@ The system captures real-time video feed from the webcam, detects faces using Ha
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/scorpionTaj/face-recognition.git
-    ```
+   ```bash
+   git clone https://github.com/scorpionTaj/face-recognition.git
+   ```
 
 2. Install dependencies:
 
-    ```bash
-    pip install -r config/requirements.txt
-    ```
+   ```bash
+   pip install -r config/requirements.txt
+   ```
 
 ## Usage
 
 1. Run the Flask application:
 
-    ```bash
-    python app.py
-    ```
+   ```bash
+   python app.py
+   ```
 
 2. Open a web browser and go to `http://localhost:5000/`.
 
@@ -44,6 +44,7 @@ The system captures real-time video feed from the webcam, detects faces using Ha
 4. To add a new user, click on the "Ajouter un Nouvel Utilisateur" button and follow the instructions.
 
 ## Directory Structure
+
 ```
 Main Project Folder
 
@@ -89,4 +90,4 @@ Contributions are welcome! Please open an issue or submit a pull request if you 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 License - see the [LICENSE](LICENSE) file for details.
