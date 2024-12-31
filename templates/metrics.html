@@ -32,7 +32,7 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
-      li:first-child {
+      li:nth-child(1) {
         background-color: #3498db;
         color: #fff;
       }
@@ -109,35 +109,47 @@
     </style>
   </head>
   <body>
-    <h1>Model Metrics</h1>
-    <ul>
-      <li>Accuracy: {{ metrics.accuracy }}</li>
-      <li>Precision: {{ metrics.precision }}</li>
-      <li>Recall: {{ metrics.recall }}</li>
-      <li>F1 Score: {{ metrics.f1_score }}</li>
-      <li>Matthews Correlation Coefficient (MCC): {{ metrics.matthews_cc }}</li>
-    </ul>
-    <h2>Performance Graph</h2>
-    <button id="saveImageButton">Save Image</button>
-    <img
-      id="imageToSave"
-      src="data:image/png;base64,{{ plot_url }}"
-      alt="Metrics Plot"
-    />
-    <a href="/">Back to Home</a>
+    <header>
+      <h1>Model Metrics</h1>
+    </header>
+    <main>
+      <section>
+        <ul>
+          <li>Accuracy: {{ metrics.accuracy }}</li>
+          <li>Precision: {{ metrics.precision }}</li>
+          <li>Recall: {{ metrics.recall }}</li>
+          <li>F1 Score: {{ metrics.f1_score }}</li>
+          <li>
+            Matthews Correlation Coefficient (MCC): {{ metrics.matthews_cc }}
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h2>Performance Graph</h2>
+        <button id="saveImageButton">Save Image</button>
+        <img
+          id="imageToSave"
+          src="data:image/png;base64,{{ plot_url }}"
+          alt="Metrics Plot"
+        />
+      </section>
+    </main>
+    <footer>
+      <a href="/">Back to Home</a>
+    </footer>
+    <script>
+      document
+        .getElementById("saveImageButton")
+        .addEventListener("click", function () {
+          var image = document.getElementById("imageToSave");
+          var imageName = "metrics_plot.png"; // Set a default image name
+          var link = document.createElement("a");
+          link.href = image.src;
+          link.download = imageName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+    </script>
   </body>
-  <script>
-    document
-      .getElementById("saveImageButton")
-      .addEventListener("click", function () {
-        var image = document.getElementById("imageToSave");
-        var imageName = image.src.split("/").pop(); // Extract image name from src
-        var link = document.createElement("a");
-        link.href = image.src;
-        link.download = imageName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-  </script>
 </html>

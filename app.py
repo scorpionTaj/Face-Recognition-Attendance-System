@@ -1,10 +1,10 @@
-from flask import Flask, request, render_template, Response
+from flask import Flask, request, render_template, Response, send_file
 from datetime import date, datetime
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 import sqlite3
 import joblib
-from io import StringIO
+from io import BytesIO, StringIO
 import cv2
 import os
 from sklearn.metrics import (
@@ -20,6 +20,9 @@ import io
 import base64
 import matplotlib
 import logging
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
 
 # Use Agg backend for Matplotlib to avoid GUI-related issues
 matplotlib.use("agg")
@@ -177,6 +180,41 @@ def export_to_csv():
     except Exception as e:
         logging.error(f"Error exporting to CSV: {e}")
         return "Error exporting to CSV", 500
+
+def generate_pdf():
+    """Generate a PDF report of the attendance data."""
+    try:
+        names, rolls, arrivees, departs, l = extract_attendance()  # noqa: E501
+
+        pdf_buffer = BytesIO()
+        pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
+        pdf_canvas.setTitle("Attendance Report")
+
+        pdf_canvas.drawString(220, 750, "Attendance Report")
+        pdf_canvas.drawString(220, 730, f"Date: {DATETODAY2}")  # noqa: E501
+
+        pdf_canvas.drawString(50, 700, "ID")
+        pdf_canvas.drawString(150, 700, "Prénom")  # noqa: E501
+        pdf_canvas.drawString(250, 700, "N° Emp")
+        pdf_canvas.drawString(350, 700, "Temps d'arrivée")  # noqa: E501
+        pdf_canvas.drawString(500, 700, "Temps de Départ")  # noqa: E501
+
+        y = 680
+        for i in range(l):
+            pdf_canvas.drawString(50, y, str(i + 1))
+            pdf_canvas.drawString(150, y, names[i])
+            pdf_canvas.drawString(250, y, str(rolls[i]))
+            pdf_canvas.drawString(350, y, arrivees[i])  # noqa: E501
+            pdf_canvas.drawString(500, y, departs[i])
+            y -= 20
+
+        pdf_canvas.save()
+        pdf_buffer.seek(0)
+
+        return send_file(pdf_buffer, mimetype='application/pdf', as_attachment=True, download_name='attendance_report.pdf')
+    except Exception as e:
+        logging.error(f"Error generating PDF: {e}")
+        return "Error generating PDF", 500
 
 def add_attendance(name):
     """Add attendance record for a user."""
@@ -403,6 +441,11 @@ def add():
 def export_csv():
     """Export attendance data to a CSV file."""
     return export_to_csv()
+
+@app.route("/export/pdf")
+def export_pdf():
+    """Export attendance data to a PDF file."""
+    return generate_pdf()
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0")

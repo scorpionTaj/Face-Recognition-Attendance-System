@@ -132,6 +132,9 @@
             <li class="nav-item">
               <a class="nav-link" href="/export/csv">Exporter en CSV</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/export/pdf">Exporter en PDF</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -202,22 +205,26 @@
           </button>
         </a>
         <table style="background-color: white">
-          <tr>
-            <td><b>ID</b></td>
-            <td><b>Prènom</b></td>
-            <td><b>N° Emp</b></td>
-            <td><b>Temps d'arrivée</b></td>
-            <td><b>Temps de Départ</b></td>
-          </tr>
-          {% if l %} {% for i in range(l) %}
-          <tr>
-            <td>{{ i+1 }}</td>
-            <td>{{ names[i] }}</td>
-            <td>{{ rolls[i] }}</td>
-            <td>{{ arrivees[i] }}</td>
-            <td>{{ departs[i] }}</td>
-          </tr>
-          {% endfor %} {% endif %}
+          <thead>
+            <tr>
+              <th><b>ID</b></th>
+              <th><b>Prènom</b></th>
+              <th><b>N° Emp</b></th>
+              <th><b>Temps d'arrivée</b></th>
+              <th><b>Temps de Départ</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if l %} {% for i in range(l) %}
+            <tr>
+              <td>{{ i+1 }}</td>
+              <td>{{ names[i] }}</td>
+              <td>{{ rolls[i] }}</td>
+              <td>{{ arrivees[i] }}</td>
+              <td>{{ departs[i] }}</td>
+            </tr>
+            {% endfor %} {% endif %}
+          </tbody>
         </table>
       </div>
 
