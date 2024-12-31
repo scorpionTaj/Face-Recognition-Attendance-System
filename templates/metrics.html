@@ -1,140 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model Metrics</title>
+    <style>
+      body {
+        font-family: "JetBrains Mono", sans-serif;
+        line-height: 1.6;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Model Metrics</title>
-  <style>
-    body {
-      font-family: "jetBrains Mono", sans-serif;
-      line-height: 1.6;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 20px;
-    }
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 20px;
-    }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
+      li {
+        margin-bottom: 10px;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
 
-    li {
-      margin-bottom: 10px;
-      background-color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+      li:first-child {
+        background-color: #3498db;
+        color: #fff;
+      }
 
-    li:first-child {
-      background-color: #3498db;
-      color: #fff;
-    }
+      li:nth-child(2) {
+        background-color: #ffa500;
+        color: #fff;
+      }
 
-    li:nth-child(2) {
-      background-color: #ffa500;
-      color: #fff;
-    }
+      li:nth-child(3) {
+        background-color: #008000;
+        color: #fff;
+      }
 
-    li:nth-child(3) {
-      background-color: #008000;
-      color: #fff;
-    }
+      li:nth-child(4) {
+        background-color: #ff0000;
+        color: #fff;
+      }
 
-    li:nth-child(4) {
-      background-color: #ff0000;
-      color: #fff;
-    }
+      li:nth-child(5) {
+        background-color: #9b59b6;
+        color: #fff;
+      }
 
-    li:nth-child(5) {
-      background-color: #9b59b6;
-      color: #fff;
-    }
+      h2 {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        color: #333;
+      }
 
-    h2 {
-      text-align: center;
-      margin-top: 30px;
-      margin-bottom: 10px;
-      color: #333;
-    }
+      img {
+        display: block;
+        margin: auto;
+        max-width: 100%;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+      }
 
-    img {
-      display: block;
-      margin: auto;
-      max-width: 100%;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
+      a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+      }
 
-    a {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #3498db;
-      text-decoration: none;
-      font-weight: bold;
-    }
+      a:hover {
+        text-decoration: underline;
+      }
 
-    a:hover {
-      text-decoration: underline;
-    }
+      #saveImageButton {
+        display: block;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
 
-    #saveImageButton {
-      display: block;
-      margin: 20px auto;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
+      #imageToSave {
+        max-width: 100%;
+        height: auto;
+      }
 
-    #imageToSave {
-      max-width: 100%;
-      height: auto;
-    }
-
-    .image-gallery img {
-      width: 100px;
-      height: auto;
-      margin: 5px;
-    }
-  </style>
-</head>
-
-<body>
-  <h1>Model Metrics</h1>
-  <ul>
-    <li>Accuracy: {{ metrics.accuracy }}</li>
-    <li>Precision: {{ metrics.precision }}</li>
-    <li>Recall: {{ metrics.recall }}</li>
-    <li>F1 Score: {{ metrics.f1_score }}</li>
-    <li>Matthews Correlation Coefficient (MCC): {{ metrics.matthews_cc }}</li>
-  </ul>
-  <h2>Performance Graph</h2>
-  <button id="saveImageButton">Save Image</button>
-  <img id="imageToSave" src="data:image/png;base64,{{ plot_url }}" alt="Metrics Plot">
-  <a href="/">Back to Home</a>
-</body>
-<script>
-  document.getElementById('saveImageButton').addEventListener('click', function () {
-    var image = document.getElementById('imageToSave');
-    var imageName = image.src.split('/').pop(); // Extract image name from src
-    var link = document.createElement('a');
-    link.href = image.src;
-    link.download = imageName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-</script>
-
+      .image-gallery img {
+        width: 100px;
+        height: auto;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Model Metrics</h1>
+    <ul>
+      <li>Accuracy: {{ metrics.accuracy }}</li>
+      <li>Precision: {{ metrics.precision }}</li>
+      <li>Recall: {{ metrics.recall }}</li>
+      <li>F1 Score: {{ metrics.f1_score }}</li>
+      <li>Matthews Correlation Coefficient (MCC): {{ metrics.matthews_cc }}</li>
+    </ul>
+    <h2>Performance Graph</h2>
+    <button id="saveImageButton">Save Image</button>
+    <img
+      id="imageToSave"
+      src="data:image/png;base64,{{ plot_url }}"
+      alt="Metrics Plot"
+    />
+    <a href="/">Back to Home</a>
+  </body>
+  <script>
+    document
+      .getElementById("saveImageButton")
+      .addEventListener("click", function () {
+        var image = document.getElementById("imageToSave");
+        var imageName = image.src.split("/").pop(); // Extract image name from src
+        var link = document.createElement("a");
+        link.href = image.src;
+        link.download = imageName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+  </script>
 </html>
