@@ -15,7 +15,6 @@ from sklearn.metrics import (
     matthews_corrcoef,
 )
 from sklearn.model_selection import train_test_split
-from sklearn.utils import shuffle
 import csv
 import io
 import base64
@@ -57,7 +56,15 @@ c.execute(
 )
 conn.commit()
 
-logging.basicConfig(level=logging.INFO,filename='/logs/app.log',format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+if not os.path.isdir("logs"):
+    os.makedirs("logs")
+
+logging.basicConfig(
+    level=logging.INFO,
+    filename='logs/app.log',
+    format='%(asctime)s - %(message)s',
+    datefmt='%d-%b-%y %H:%M:%S'
+)
 
 def totalreg():
     """Return the total number of registered users."""
