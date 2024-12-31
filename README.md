@@ -43,7 +43,7 @@ The system captures real-time video feed from the webcam, detects faces using Ha
 4. To add a new user, click on the "Ajouter un Nouvel Utilisateur" button and follow the instructions.
 
 ## Directory Structure
-
+```
 Main Project Folder
 
 ├── attendance/                               # Directory for attendance-related functionality
@@ -80,7 +80,7 @@ Main Project Folder
 ├── app.py                       # Main application file
 ├── LICENSE                      # License file for the project
 ├── README.md                    # Readme file for the project overview and instructions
-
+```
 
 ## Contributing
 
