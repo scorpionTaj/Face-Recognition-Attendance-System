@@ -6,6 +6,9 @@ This is a simple web-based face recognition attendance system implemented using 
 
 The system captures real-time video feed from the webcam, detects faces using Haar cascade classifier, and recognizes them based on a pre-trained KNN classifier. Users can add new faces to the system, and the attendance of recognized individuals is logged in a SQL Database.
 
+<img alt="image" src="https://github.com/user-attachments/assets/a51dcda4-06ba-45ad-ab0c-be48e5e3c501" />
+
+
 ## Prerequisites
 
 - Python 3.x
